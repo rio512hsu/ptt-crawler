@@ -74,9 +74,13 @@ def crawl_board(board_name, start_page, end_page):
     try:
       response = urllib2.urlopen(page_url(n))
       sys.stdout.write('page_url(n): %s\n' % page_url(n))
-      if response.geturl().startswith('http://www.ptt.cc/ask/over18'):
+      ##print response.read()
+      ##print response.get_full_url()
+      if response.geturl().startswith('https://www.ptt.cc/ask/over18'):
+        ##print "over 18?"
         response = click_over18(response)
 
+      ##print(response.read())
       page = letree.HTML(response.read())
     except:
       sys.stderr.write('Error occured while fetching %s\n' % page_url(n))
@@ -99,8 +103,10 @@ def crawl_board(board_name, start_page, end_page):
         post_file = open(post_id, 'w')
         try:
           response = urllib2.urlopen(post_url(post_id))
-          if response.geturl().startswith('http://www.ptt.cc/ask/over18'):
+          ##print post_url(post_id) 
+          if response.geturl().startswith('https://www.ptt.cc/ask/over18'):
             response = click_over18(response)
+          ##print response.read()
           post = letree.HTML(response.read())
         except:
           sys.stderr.write('Error occured while fetching %s\n' % post_url(post_id))
@@ -130,6 +136,7 @@ def crawl_board(board_name, start_page, end_page):
 
 def main(argv):
   check_args(argv)
+  print argv
   crawl_ptt()
 
 if __name__ == "__main__":
